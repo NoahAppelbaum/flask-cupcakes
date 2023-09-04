@@ -20,3 +20,21 @@ connect_db(app)
 # app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 # toolbar = DebugToolbarExtension(app)
+
+@app.get("/api/cupcakes")
+def get_all_cupcakes():
+    """return json of list of all cupcakes"""
+
+    cupcakes = Cupcake.query.all()
+
+    serialized = [cupcake.serialize() for cupcake in cupcakes]
+
+    return jsonify(cupcakes = serialized)
+
+@app.get("/api/cupcakes/<int:cupcake_id>")
+def get_cupcake(cupcake_id):
+    """returns json data about particular cupcake"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    return jsonify(cupcake = cupcake.serialize())

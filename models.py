@@ -45,6 +45,7 @@ class Cupcake(db.Model):
     )
 
     def serialize(self):
+        """Return instance properties in a dictionary"""
 
         return {
             "id" : self.id,

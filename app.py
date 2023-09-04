@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, jsonify, request
 # from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, Cupcake, db, DEFAULT_IMAGE_URL
-# from flask_sqlalchemy import  DataError
+# from sqlalchemy.exc import  DataError
 
 """Flask app for Cupcakes"""
 app = Flask(__name__)
@@ -60,6 +60,7 @@ def add_cupcake():
         error_message = {"Error": "Incorrect or missing data"}
         return (jsonify(error_message), 400)
 
+    # Worry about more exceptions... later this week!
     # except DataError:
     #     error_message = {"Error": "Incorrect data types"}
     #     return (jsonify(error_message), 400)
@@ -70,3 +71,30 @@ def add_cupcake():
     serialized = new_cupcake.serialize()
 
     return (jsonify(cupcake=serialized), 201)
+
+
+@app.patch("/api/cupcakes/<int:cupcake_id>")
+def update_cupcake(cupcake_id):
+    """Updates cupcake record in db"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    update_data = request.json
+
+    for key in update_data:
+        if update_data.get(key):
+            setattr(cupcake, key, update_data[key])
+
+    db.session.commit()
+
+    return jsonify(cupcake=cupcake.serialize())
+
+@app.delete("/api/cupcakes/<int:cupcake_id>")
+def delete_cupcake(cupcake_id):
+    """Deletes cupcake from db"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    db.session.delete(cupcake)
+    db.session.commit()
+
+    return jsonify(deleted = cupcake_id)

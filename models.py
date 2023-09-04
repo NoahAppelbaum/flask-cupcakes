@@ -15,7 +15,7 @@ DEFAULT_IMAGE_URL = "https://tinyurl.com/demo-cupcake"
 class Cupcake(db.Model):
     """Model for Cupcake resource"""
 
-    __tablename_ = "cupcakes"
+    __tablename__ = "cupcakes"
 
     id = db.Column(
         db.Integer,

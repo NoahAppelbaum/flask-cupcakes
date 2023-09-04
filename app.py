@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, jsonify, request
 # from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, Cupcake, db, DEFAULT_IMAGE_URL
+# from flask_sqlalchemy import  DataError
 
 """Flask app for Cupcakes"""
 app = Flask(__name__)
@@ -42,16 +43,26 @@ def get_cupcake(cupcake_id):
 @app.post("/api/cupcakes")
 def add_cupcake():
     """adds a cupcake to the db"""
-    flavor = request.json["flavor"]
+    try:
+        flavor = request.json["flavor"]
 
-    size = request.json["size"]
+        size = request.json["size"]
 
-    rating = request.json["rating"]
+        rating = request.json["rating"]
 
-    image_url = request.json.get("image_url", None)
+        image_url = request.json.get("image_url", None)
 
-    new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating,
+        new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating,
                           image_url=image_url)
+
+    #Return bad request response on missing or bad data
+    except KeyError:
+        error_message = {"Error": "Incorrect or missing data"}
+        return (jsonify(error_message), 400)
+
+    # except DataError:
+    #     error_message = {"Error": "Incorrect data types"}
+    #     return (jsonify(error_message), 400)
 
     db.session.add(new_cupcake)
     db.session.commit()

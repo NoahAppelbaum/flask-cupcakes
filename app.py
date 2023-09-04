@@ -81,8 +81,7 @@ def update_cupcake(cupcake_id):
     update_data = request.json
 
     for key in update_data:
-        if update_data.get(key):
-            setattr(cupcake, key, update_data[key])
+        setattr(cupcake, key, update_data[key])
 
     db.session.commit()
 

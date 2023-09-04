@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Cupcakes!</h1>
+
+  <div class="container">
+  <form id="newCupcakeForm">
+    {{ form.hidden_tag() }}
+
+  {% for field in form if field.widget.input_type != "hidden" %}
+    <div class="form-input">
+      {{ field.label }}
+      {{ field }}
+      {% for error in field.errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+
+  {% endfor %}
+
+    <button type="submit" class="submit-button">Add Cupcake!</button>
+  </form>
+
+  <div>
+    <h2>Cupcakes:</h2>
+    <ul id="cupcakeList">
+
+    </ul>
+  </div>
+
+
+</div>
+
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="/static/cupcakes.js"></script>
+</body>
+</html>

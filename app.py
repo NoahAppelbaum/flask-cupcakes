@@ -3,6 +3,7 @@ from flask import Flask, render_template, flash, redirect, jsonify, request
 # from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, Cupcake, db, DEFAULT_IMAGE_URL
 # from sqlalchemy.exc import  DataError
+from forms import AddCupcakeForm
 
 """Flask app for Cupcakes"""
 app = Flask(__name__)
@@ -21,6 +22,17 @@ connect_db(app)
 # app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 # toolbar = DebugToolbarExtension(app)
+
+#Home Route
+
+@app.get("/")
+def display_homepage():
+
+    form = AddCupcakeForm()
+
+    return render_template("index.html", form=form)
+
+#API Routes
 
 @app.get("/api/cupcakes")
 def get_all_cupcakes():
@@ -71,7 +83,6 @@ def add_cupcake():
     serialized = new_cupcake.serialize()
 
     return (jsonify(cupcake=serialized), 201)
-
 
 @app.patch("/api/cupcakes/<int:cupcake_id>")
 def update_cupcake(cupcake_id):

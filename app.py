@@ -27,6 +27,8 @@ connect_db(app)
 
 @app.get("/")
 def display_homepage():
+    """Displays the homepage with a form to add a new cupcake."""
+    #DONE: add docstring
 
     form = AddCupcakeForm()
 
@@ -62,7 +64,7 @@ def add_cupcake():
 
         rating = request.json["rating"]
 
-        image_url = request.json.get("image_url", None)
+        image_url = request.json.get("image_url") or None
 
         new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating,
                           image_url=image_url)
